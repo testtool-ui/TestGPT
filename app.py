@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 import requests
+import os
 
 app = Flask(__name__)
 
 # Hugging Face Inference API
 API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
-HEADERS = {"Authorization": "Bearer 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"}  # Replace with your Hugging Face API key
+HEADERS = {"Authorization": f"Bearer {os.getenv('HF_API_KEY')}"}
 
 def query_huggingface(payload):
     response = requests.post(API_URL, headers=HEADERS, json=payload)
@@ -35,4 +36,4 @@ def chat():
     return jsonify({"reply": chatbot_reply})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8080)
